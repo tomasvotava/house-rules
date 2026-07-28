@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "tomasvotava",
+  "description": "Tomas Votava's Claude Code plugins. Ships the standing engineering guardrails — git and PR discipline, code-quality gates, comment hygiene — that his repositories expect contributors' agents to follow.",
+  "owner": {
+    "name": "Tomas Votava",
+    "email": "info@tomasvotava.eu"
+  },
+  "plugins": [
+    {
+      "name": "house-rules",
+      "source": "./",
+      "category": "development"
+    }
+  ]
+}
