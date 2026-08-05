@@ -9,6 +9,7 @@ contributors' agents to follow.
 | --- | --- |
 | `house-rules` | Cross-repo guardrails: git and PR discipline, code-quality gates, comments-vs-docstrings, architecture and testing defaults. |
 | `leakage-review` | Review a diff for comments, docstrings, and outward-facing strings that leaked the development conversation into the codebase. |
+| `green-light` | Recognize Tom's standing end-to-end authorization phrase: implement, independently review, commit, push, and open the PR without further check-ins — never merge. |
 
 Both are model-invoked: Claude reads each skill's description and decides when to load it. The
 plugin makes the rules available and prompts their use; it does not block any action.
