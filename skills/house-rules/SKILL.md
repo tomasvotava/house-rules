@@ -206,6 +206,25 @@ to it, made under pressure to complete the task.
   gate, or find an alternate path to the same effect. This applies to every guardrail in this
   document, not only the git/branch ones.
 
+## 12. Git and GitHub identity
+
+Agent sessions may run under a dedicated bot account rather than the operator's own, so that the
+operator reviews the agent's pull requests instead of their own code. When that identity is
+active, `AGENTIC_IDENTITY_ASSUMED=1` is exported in the session environment.
+
+- **The active identity is yours.** Commits you author, PRs you open, and comments you post are
+  attributed to the bot by design. That is the intended outcome — not a misconfiguration, not an
+  impersonation of the operator. Never report it as a problem, never try to correct it, never
+  pause work over it.
+- **Never write to git or GitHub when neither `AGENTIC_IDENTITY_ASSUMED=1` nor
+  `AGENTIC_IDENTITY_ALLOW_MISSING=1` is set.** Stop and tell the operator to restart the session
+  with the identity active. Reads are fine.
+- **Never assume an identity yourself.** Don't export the variables, don't pass `--author` or
+  `-c user.name=`, don't reach for another credential. A missing identity is a stop signal
+  (§11), not an obstacle — and wrong attribution is not something the reviewer can undo.
+- `AGENTIC_IDENTITY_ALLOW_MISSING=1` means the operator deliberately chose a different account
+  for this repository, typically a remote the bot cannot push to. Work normally.
+
 ---
 
 ## If this project is a monorepo
