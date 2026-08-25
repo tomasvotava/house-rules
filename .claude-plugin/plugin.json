@@ -1,8 +1,8 @@
 {
   "name": "house-rules",
   "displayName": "Tom's House Rules",
-  "description": "Standing engineering guardrails reused across Tom's repositories: git/PR discipline, code-quality gates, comment and docstring hygiene.",
-  "version": "0.2.0",
+  "description": "Standing engineering guardrails reused across Tom's repositories: git/PR discipline, code-quality gates, comment and docstring hygiene, and hooks that keep agent work attributed to the agent.",
+  "version": "0.3.0",
   "author": {
     "name": "Tomas Votava",
     "email": "info@tomasvotava.eu",
@@ -10,5 +10,5 @@
   },
   "repository": "https://github.com/tomasvotava/house-rules",
   "license": "MIT",
-  "keywords": ["guardrails", "conventions", "code-review", "git-workflow"]
+  "keywords": ["guardrails", "conventions", "code-review", "git-workflow", "identity"]
 }

@@ -11,8 +11,32 @@ contributors' agents to follow.
 | `leakage-review` | Review a diff for comments, docstrings, and outward-facing strings that leaked the development conversation into the codebase. |
 | `green-light` | Recognize Tom's standing end-to-end authorization phrase: implement, independently review, commit, push, and open the PR without further check-ins — never merge. |
 
-Both are model-invoked: Claude reads each skill's description and decides when to load it. The
-plugin makes the rules available and prompts their use; it does not block any action.
+The skills are model-invoked: Claude reads each description and decides when to load it. They
+make the rules available and prompt their use; they do not block any action.
+
+## Hooks
+
+Two hooks enforce the agent's git and GitHub identity. They require `bash`.
+
+| Hook | Event | Behaviour |
+| --- | --- | --- |
+| `identity-context.sh` | `SessionStart` | States which identity the session writes under, so a bot author line reads as intended rather than as a bug to report. |
+| `identity-guard.sh` | `PreToolUse` (`Bash`) | Blocks git and GitHub write commands when no identity was assumed. Reads are untouched. |
+
+Both read two environment variables:
+
+| Variable | Meaning |
+| --- | --- |
+| `AGENTIC_IDENTITY_ASSUMED=1` | A dedicated agent identity is active. Attribution to it is intended. |
+| `AGENTIC_IDENTITY_ALLOW_MISSING=1` | No agent identity, and that is a deliberate choice — a remote the agent account cannot push to, for instance. Writes are allowed. |
+| `AGENTIC_IDENTITY_HINT` | Optional. The recovery instruction quoted back when an identity is missing, e.g. ``Exit, run `start_agentic_mode`, and start claude again.`` Defaults to a generic instruction. |
+
+With neither set, git and GitHub writes are blocked for the whole session.
+
+Export the variables in the environment that launches `claude`, alongside whatever provisions the
+identity itself (`GIT_CONFIG_GLOBAL`, a `gh` credential helper, a PATH shim). The hooks read the
+environment Claude Code was started in, so exporting them from inside a session has no effect —
+restart instead.
 
 ## Use it in a repository
 
