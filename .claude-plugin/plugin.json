@@ -2,7 +2,7 @@
   "name": "house-rules",
   "displayName": "Tom's House Rules",
   "description": "Standing engineering guardrails reused across Tom's repositories: git/PR discipline, code-quality gates, comment and docstring hygiene, and hooks that keep agent work attributed to the agent.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "author": {
     "name": "Tomas Votava",
     "email": "info@tomasvotava.eu",
