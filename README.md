@@ -10,6 +10,7 @@ contributors' agents to follow.
 | `house-rules` | Cross-repo guardrails: git and PR discipline, code-quality gates, comments-vs-docstrings, architecture and testing defaults. |
 | `leakage-review` | Review a diff for comments, docstrings, and outward-facing strings that leaked the development conversation into the codebase. |
 | `green-light` | Recognize Tom's standing end-to-end authorization phrase: implement, independently review, commit, push, and open the PR without further check-ins — never merge. |
+| `closing-comments` | Recognize Tom's standing post-merge finalization phrase: comment on the worked and downstream issues, transition the ticket, file follow-ups for deferred work. Covers Jira, GitHub issues, and GitHub Projects. |
 
 The skills are model-invoked: Claude reads each description and decides when to load it. They
 make the rules available and prompt their use; they do not block any action.
