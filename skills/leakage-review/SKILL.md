@@ -1,6 +1,6 @@
 ---
 name: leakage-review
-description: Review the current diff for "conversation leakage" in comments and docstrings — text that narrates the task/chat/tickets, justifies a change to the requester, or only makes sense mid-development, instead of serving a future contributor (comments) or a future consumer (docstrings). Also flags prescriptive/editorializing text in comments, docstrings, and outward-facing string literals (error/log/config messages) that tells the operator what to do instead of stating the contract. Use when asked to check a diff/PR/branch for comment or docstring leakage, chat-leak, audience-mismatched docs, prescriptive/moralizing strings, or to vet comments before a commit or PR.
+description: Review the current diff for "conversation leakage" in comments and docstrings — text that narrates the task/chat/tickets, justifies a change to the requester, or only makes sense mid-development, instead of serving a future contributor (comments) or a future consumer (docstrings). Also flags prescriptive/editorializing text in comments, docstrings, and outward-facing string literals (error/log/config messages) that tells the operator what to do instead of stating the contract, and verbose comments/docstrings that outgrow the code they describe or narrate what the code already says. Use when asked to check a diff/PR/branch for comment or docstring leakage, chat-leak, audience-mismatched docs, prescriptive/moralizing strings, or to vet comments before a commit or PR.
 ---
 
 # Leakage review
@@ -30,7 +30,16 @@ Hunt for comments and docstrings that leaked the development conversation into t
 
     Tell-tale phrases in added lines: `for local dev`, `never enable`, `in prod`, `you should`, `we recommend`, `only enable …`.
 
-A comment that documents a genuine, durable design invariant for contributors is **fine** — flag only true leakage, audience mismatch, or prescription.
+### Verbosity
+
+Flag comments and docstrings that cost the reader more than they give:
+
+- Longer than the code they describe — a two-line function with a ten-line docstring.
+- Narrate *what* the code does when the names already say it. Suggest the rename or split that makes the comment unnecessary.
+- A docstring that restates the signature, the types, or the implementation.
+- Several sentences where one carries the meaning. The rewrite is shorter, not reworded.
+
+A comment that documents a genuine, durable design invariant for contributors, in as few words as it needs, is **fine** — flag only true leakage, audience mismatch, prescription, or verbosity.
 
 ## How to run it
 
@@ -39,9 +48,9 @@ A comment that documents a genuine, durable design invariant for contributors is
    - Else if there are uncommitted changes (`git status --porcelain` non-empty), review `git diff HEAD`.
    - Else review the branch against its base: `git diff $(git merge-base HEAD origin/HEAD)...HEAD` (fall back to the repo's default branch, e.g. `main`/`master`, if `origin/HEAD` is unset).
 2. **Prefer delegating** to the `pr-review-toolkit:comment-analyzer` agent if it is available in this environment — dispatch it with the diff scope and the criteria above, instructing it to also confirm which comments/docstrings are good so the signal is clear. If that agent is not available, do the analysis yourself by reading the changed files directly.
-3. **Report** each finding with: the quoted comment/docstring, `file:line`, why it reads as leakage or audience-mismatch, and a concrete rewrite or deletion. List the comments/docstrings that are correct, too. Do **not** edit files unless the user asks — this is a review.
+3. **Report** each finding with: the quoted comment/docstring, `file:line`, why it reads as leakage or audience-mismatch, and a concrete rewrite (shorter than the original) or deletion. List the comments/docstrings that are correct, too. Do **not** edit files unless the user asks — this is a review.
 
 ## Notes
 
 - Honour the repo's own rule if it has one (e.g. a `GUARDRAILS.md` "comments vs docstrings" section); it overrides this skill's phrasing.
-- Keep scope to comments, docstrings, and outward-facing string literals (error/log/config messages) — this is not a general code review. The prescription check is the only reason to look at string literals; logic, naming, and behaviour are out of scope.
+- Keep scope to comments, docstrings, and outward-facing string literals (error/log/config messages) — this is not a general code review. The prescription check is the only reason to look at string literals; logic and behaviour are out of scope, and naming only as the fix for a verbose comment.
