@@ -1,6 +1,6 @@
 ---
 name: house-rules
-description: Tom's personal, cross-repo standing engineering guardrails — git/PR discipline (never push master, rebase-only, conventional commits, no tags, worktrees inside the checkout), code-quality gates, comments-vs-docstrings, ask-don't-assume, no-shortcuts, sub-agent dispatch safety. Use when starting work in any repo, before committing or opening a PR, before dispatching any sub-agent, or when unsure of the working rules. (A repo with its own committed house-rules skill takes precedence there.)
+description: Tom's personal, cross-repo standing engineering guardrails — git/PR discipline (never push master, rebase-only, conventional commits, no tags, worktrees inside the checkout), code-quality gates, comments-vs-docstrings, brevity, behaviour-level tests, ask-don't-assume, no-shortcuts, sub-agent dispatch safety. Use when starting work in any repo, before committing or opening a PR, before dispatching any sub-agent, or when unsure of the working rules. (A repo with its own committed house-rules skill takes precedence there.)
 ---
 
 # House rules
@@ -16,6 +16,9 @@ If the repo has its own `GUARDRAILS.md`, `docs/ARCHITECTURE.md`, `docs/GOTCHAS.m
 - **When you're unsure, ask — don't guess and proceed.** Approval given in one context does
   not extend to the next. If a decision changes what you build, surface it instead of
   picking silently.
+- **Every word costs the reader.** Comments, docstrings, docs, ADRs, PR descriptions and test
+  suites are read by people. Use the fewest words that keep the meaning; cut any sentence whose
+  removal loses nothing.
 - **No shortcuts.** Don't silence a check, stub a test, hardcode a value, or fake a result
   to get to "done" faster. If the right path is blocked, say so and stop.
 - **Recurring-class problems get a portable fix, not a point patch.** When a problem will
@@ -111,7 +114,12 @@ A justification that doesn't name a constraint is grounds to remove the silence.
 - **Comments and docstrings serve different audiences — don't conflate them.**
   - **Comments are for the next contributor.** Write one only to explain *why* a non-obvious
     choice was made (a hidden constraint, a workaround, a subtle invariant). Don't narrate
-    *what* the code does — well-named identifiers are the documentation.
+    *what* the code does — well-named identifiers are the documentation. Code that needs a
+    comment to be followed usually needs a rename or a split instead; a few words for genuinely
+    complex code are fine.
+  - **A comment or docstring almost never outgrows the code it describes.** Two lines of code
+    don't get ten lines of docstring. A docstring states the contract in a sentence or two and
+    doesn't repeat what the signature and types already say.
   - **Docstrings / published docs are for consumers.** Document the contract: inputs, outputs,
     errors, invariants. Don't use a docstring to talk to a contributor about implementation.
   - **Explanations to the person you're chatting with go in the chat, not the file.**
@@ -160,12 +168,23 @@ A justification that doesn't name a constraint is grounds to remove the silence.
 - **Test our glue and logic, not a third-party library's promised behavior.** Don't write tests
   that merely re-assert a dependency's documented feature works.
 - Prefer constructor/config overrides for fixtures over monkeypatching internals.
+- **Cover use cases, not lines.** A test earns its place by failing when behaviour someone
+  relies on breaks. Line coverage is a by-product; test count is not evidence.
+- **No change-detector tests.** Don't assert incidental details: that a module exports a name,
+  that text is red, a CSS class, a log message's wording. They break on every harmless edit
+  and catch nothing when the behaviour breaks. The same assertion is valid when the detail is
+  a contract, e.g. an error string clients parse. If the context doesn't settle which, ask.
+- **A test that mocks away the logic under test proves nothing.** If all that's left between
+  the mocks is wiring, test it a level higher or not at all.
 
 ## 9. Docs
 
 - **Tone is instructional: what + how, imperative.** No pep talk, no marketing prose, no
   restating why the thing is great. READMEs, CONTRIBUTING, and procedures tell a reader what to
   do and how.
+- **ADRs and docs: decision, why, known trade-offs — nothing more.** State the consequence,
+  not a tutorial on the mechanism behind it. "B-tree indexes skip fields a migration removed
+  from the jsonb schema; use GIN." is the whole point — the reader can look up how GIN works.
 - **A project's own docs describe its standalone contract** (what it does, how to use it).
   Deployment topology and cross-project/monorepo specifics belong in ADRs / ARCHITECTURE, not
   in a leaf project's README.
