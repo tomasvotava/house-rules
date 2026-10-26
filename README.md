@@ -85,7 +85,7 @@ Validate the manifests after editing either one:
 claude plugin validate .
 ```
 
-Bump `version` in `.claude-plugin/plugin.json` for every released change, then tag it:
+Bump `version` in `.claude-plugin/plugin.json` for every released change. After the PR merges, the maintainer tags the release:
 
 ```sh
 claude plugin tag .
