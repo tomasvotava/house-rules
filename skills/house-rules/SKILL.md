@@ -1,6 +1,6 @@
 ---
 name: house-rules
-description: Tom's personal, cross-repo standing engineering guardrails — git/PR discipline (never push master, rebase-only, conventional commits), code-quality gates, comments-vs-docstrings, ask-don't-assume, no-shortcuts, sub-agent dispatch safety. Use when starting work in any repo, before committing or opening a PR, before dispatching any sub-agent, or when unsure of the working rules. (A repo with its own committed house-rules skill takes precedence there.)
+description: Tom's personal, cross-repo standing engineering guardrails — git/PR discipline (never push master, rebase-only, conventional commits, no tags, worktrees inside the checkout), code-quality gates, comments-vs-docstrings, ask-don't-assume, no-shortcuts, sub-agent dispatch safety. Use when starting work in any repo, before committing or opening a PR, before dispatching any sub-agent, or when unsure of the working rules. (A repo with its own committed house-rules skill takes precedence there.)
 ---
 
 # House rules
@@ -78,6 +78,16 @@ whose dotfiles, PATH, and runtime versions are load-bearing; silent installs bre
   requires rewriting core functionality, that's two PRs.
 - **Open–closed posture.** Prefer adding a module that plugs in over editing a shared core
   type. When you must modify shared code, justify it in the PR description.
+- **Never create git tags or releases** (`git tag`, `git push --tags`, `gh release create`). The
+  repo's release tooling or the user owns tagging and publishing, and a pushed tag can start a
+  real build or publish. Bump a version in a PR only where the repo's docs ask for it; where a
+  tool such as commitizen owns the version, leave it alone. For a release, tell the user which
+  release command the repo uses (`cz bump`, a release workflow, …) and leave running it to them.
+  A plan that mentions tagging doesn't authorize creating a tag.
+- **Worktrees go inside the main checkout**, under `.claude/worktrees/` or `.worktrees/`, never
+  as siblings one level up. Before creating one, check that the directory is git-ignored
+  (`git check-ignore -v <dir>`). If it isn't, stop and ask before adding it to `.gitignore` or
+  `.git/info/exclude`.
 - Interactive git flags (`git rebase -i`, `git add -i`) may be unavailable in the agent
   environment — script the equivalent non-interactively or ask the user to run it.
 
